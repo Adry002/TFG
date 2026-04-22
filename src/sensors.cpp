@@ -2,20 +2,21 @@
 //FASE 1: ADQUISICIÓN DE DATOS SIN MODBUS
 //---------------------------------------
 
-#include "sensors.h" // <--- Fundamental para conectar el .cpp con el .h
-#include <OneWire.h>
-#include <DallasTemperature.h>
+#include "sensors.h"
+   
+    TempSensor::TempSensor(): oneWire(new OneWire(SENSOR_PIN)), sensors(oneWire) {
+        sensors.begin();
+    }
+    TempSensor::~TempSensor() {
+        delete oneWire;
+    }
+    
+    float TempSensor::leerTemperatura() {
+        sensors.requestTemperatures();
+        return sensors.getTempCByIndex(0);
+    }
 
-#define SENSOR_PIN 4
+    void TempSensor::init() {
+        sensors.begin();
+    };
 
-OneWire oneWire(SENSOR_PIN);
-DallasTemperature sensors(&oneWire);
-
-void initSensors() {
-    sensors.begin();
-}
-
-float leerTemperatura() {
-    sensors.requestTemperatures();
-    return sensors.getTempCByIndex(0);
-}

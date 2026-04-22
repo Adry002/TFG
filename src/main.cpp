@@ -1,14 +1,16 @@
 #include <Arduino.h>
 #include "sensors.h"
 
+TempSensor sensor; // Creamos una instancia global del sensor
+
 void setup() {
     Serial.begin(115200);
-    initSensors(); // Configuramos el sensor
+    sensor.init(); // Configuramos el sensor
     Serial.println("--- Fase 1: Prueba de Hardware ---");
 }
 
 void loop() {
-    float temp = leerTemperatura();
+    float temp = sensor.leerTemperatura();
     
     if (temp != -127.0) {
         Serial.print("Temperatura actual: ");
