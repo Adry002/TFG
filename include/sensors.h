@@ -1,28 +1,41 @@
-#pragma once
 #ifndef SENSORS_H
 #define SENSORS_H
 
-#include <stdint.h>
 #include <Arduino.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include <DHT.h>
+#include <Adafruit_BMP280.h>
 
-constexpr uint8_t SENSOR_PIN = 4;
+// Definición de Pines
+constexpr uint8_t PIN_DS18B20 = 4;
+constexpr uint8_t PIN_DHT = 5;
 
+struct DatosSensores {
+    float tempDS1;
+    float tempDS2;
+    float tempDHT;
+    float humDHT;
+    float tempBMP;
+    float presBMP;
+};
 
-class TempSensor {
+class GestionSensores {
 private:
-    OneWire* oneWire=nullptr;
-    DallasTemperature sensors;
+    // Objetos para DS18B20
+    OneWire oneWire;
+    DallasTemperature dsSensores;
+    
+    // Objeto para DHT22
+    DHT dht;
+    
+    // Objeto para BMP280
+    Adafruit_BMP280 bmp;
+
 public:
-    TempSensor(const TempSensor& other) = delete; // Eliminar el constructor de copia
-    TempSensor();
-    ~TempSensor();
-    TempSensor& operator=(const TempSensor& other) = delete; // Eliminar el operador de asignación
-
-    float leerTemperatura();
-
+    GestionSensores();
     void init();
+    DatosSensores leerTodo();
 };
 
 #endif

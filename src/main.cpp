@@ -1,22 +1,22 @@
 #include <Arduino.h>
 #include "sensors.h"
 
-TempSensor sensor; // Creamos una instancia global del sensor
+GestionSensores sistema;
 
 void setup() {
     Serial.begin(115200);
-    sensor.init(); // Configuramos el sensor
-    Serial.println("--- Fase 1: Prueba de Hardware ---");
+    sistema.init();
+    Serial.println("--- Fase 1: Adquisicion Multivariable ---");
 }
 
 void loop() {
-    float temp = sensor.leerTemperatura();
-    
-    if (temp != -127.0) {
-        Serial.print("Temperatura actual: ");
-        Serial.print(temp);
-        Serial.println(" C");
-    }
+    DatosSensores misDatos = sistema.leerTodo();
 
-    delay(2000); // Solo para la Fase 1 usamos delay, en la Fase 3 lo quitaremos
+    Serial.println("----- LECTURA -----");
+    Serial.print("DS18B20 Sonda 1: "); Serial.print(misDatos.tempDS1); Serial.println(" C");
+    Serial.print("DS18B20 Sonda 2: "); Serial.print(misDatos.tempDS2); Serial.println(" C");
+    Serial.print("DHT22 Humedad: "); Serial.print(misDatos.humDHT); Serial.println(" %");
+    Serial.print("BMP280 Presion: "); Serial.print(misDatos.presBMP); Serial.println(" hPa");
+    
+    delay(2000); 
 }
